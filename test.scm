@@ -5,6 +5,23 @@
 ;-------------------------------------------------------------------------
 ;-------------------------------------------------------------------------
 ;-------------------------------------------------------------------------
+
+
+
+
+
+;-------------------------------------------------------------
+;
+;(cond (<p1 > <e 1 >)
+;      (<p2 > <e 2 >)
+;      (<pn > <e n >))
+;
+;-------------------------------------------------------------
+;
+
+
+
+
 (define (square x) (* x x))
 
 (define (square_sum x y) (+ (square x) (square y)))
@@ -238,11 +255,62 @@
 
 
 
+
+
+;---------------------------- recursive version ------------
+;(define (expt b n)
+;  (if (= n 0)
+;    1
+;    (* b (expt b (- n 1))))
+;  )
+
+
+(define (expt b n)
+  (expt-iter b n 1))
+
+(define (expt-iter b counter product)
+  (if (= counter 0)
+    product
+    (expt-iter b
+	       (- counter 1)
+	       (* b product)))
+  )
+
+
+
+(define (multp a b)
+  (if (= b 0)
+    0
+    (+ a (multp a (- b 1)))
+    )
+  )
+
+
+
+(define (double x)
+  (* x 2)
+  )
+
+(define (halve x)
+  (/ x 2)
+  )
+
+
+
+
+(define (fast-multp a b) 
+  (cond ((= b 0) 0)
+	((even? b) (fast-multp (double a) (halve b)))
+	(else (+ a (fast-multp a (- b 1)))))
+  )
+    
+
+
+
+
+
+
 (display "\nLoaded!")
-
-;test if it works
-
-
 
 
 
