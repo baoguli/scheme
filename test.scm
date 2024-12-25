@@ -264,7 +264,7 @@
 ;    (* b (expt b (- n 1))))
 ;  )
 
-
+;----------------------------iterative version-------------
 (define (expt b n)
   (expt-iter b n 1))
 
@@ -278,36 +278,78 @@
 
 
 
+;--------------------------fast exponential recursive-----------
+
+(define (fast-expt b n)
+  (cond ((= n 0) 1)
+	((even? n) (square (fast-expt b (/ n 2))))
+	(else (* b (fast-expt b (- n 1))))))
+
+
+
+;---------------------------fast exponential iteration-----------
+
+;(define (fast-expt b n)
+;    (fast-expt-iter b n 1))
+;
+;(define (fast-expt-iter b n a)
+;    (cond ((= n 0)
+;            a)
+;          ((even? n)
+;            (fast-expt-iter (square b)
+;                       (/ n 2)
+;                       a))
+;          ((odd? n)
+;            (fast-expt-iter b
+;                       (- n 1)
+;                       (* b a)))))
+;
+
+;-------------------------multiple excercise recursive------------------
+;
+;(define (multp a b)
+;  (if (= b 0)
+;    0
+;    (+ a (multp a (- b 1)))
+;    )
+;  )
+
+;-------------------------multiple excercise iterative------------------
 (define (multp a b)
-  (if (= b 0)
-    0
-    (+ a (multp a (- b 1)))
-    )
+  (multp-iter a b 0))
+
+(define (multp-iter a counter product)
+  (if (= counter 0)
+    product
+    (multp-iter a (- counter 1) (+ product a)))
   )
 
 
-
+;------------------------fast multiple excercise recursive---------------
 (define (double x)
-  (* x 2)
+  (+ x x)
   )
 
 (define (halve x)
   (/ x 2)
   )
 
-
-
-
-(define (fast-multp a b) 
-  (cond ((= b 0) 0)
-	((even? b) (fast-multp (double a) (halve b)))
-	(else (+ a (fast-multp a (- b 1)))))
-  )
+;(define (fast-multp a b) 
+;  (cond ((= b 0) 0)
+;	((even? b) (fast-multp (double a) (halve b)))
+;	(else (+ a (fast-multp a (- b 1)))))
+;  )
     
+;------------------------fast multiple excercise iterative---------------
+(define (fast-multp a b)
+  (fast-multp-iter a b 0))
 
-
-
-
+(define (fast-multp-iter a counter product)
+  (cond ((= counter 0) product)
+	((even? counter) (fast-multp-iter (double a) (halve counter) product))
+	(else (fast-multp-iter a (- counter 1) (+ a product))))
+  )
+     
 
 
 (display "\nLoaded!")
