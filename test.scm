@@ -214,19 +214,6 @@
 
 
 
-(define (fib n) (
-		 cond ((= n 0) 0) 
-		 ((= n 1) 1)
-		 (else (+ 
-			 (fib (- n 1)) 
-			 (fib (- n 2))))
-		 )
-  )
-
-
-
-
-
 
 
 
@@ -341,6 +328,7 @@
 ;  )
     
 ;------------------------fast multiple excercise iterative---------------
+
 (define (fast-multp a b)
   (fast-multp-iter a b 0))
 
@@ -350,6 +338,50 @@
 	(else (fast-multp-iter a (- counter 1) (+ a product))))
   )
      
+
+
+;----------------------------- fib recursive -----------------------------
+
+(define (fib n) (
+		 cond ((= n 0) 0) 
+		 ((= n 1) 1)
+		 (else (+ 
+			 (fib (- n 1)) 
+			 (fib (- n 2))))
+		 )
+  )
+
+
+;------------------------------ fib iterative -------------------------------
+;(define (fib n)
+;  (fib-iter 1 0 n))
+;(define (fib-iter a b count)
+;  (if (= count 0)
+;    b
+;    (fib-iter (+ a b) a (- count 1))))
+;
+
+
+;------------------------------- fast fib excersice 1.19 ---------------------
+(define (fast-fib n)
+  (fib-iter 1 0 0 1 n))
+(define (fib-iter a b p q count)
+  (cond ((= count 0) b)
+	((even? count)
+	 (fib-iter a
+		   b
+		   (+ (square p) (square q)) ; compute p
+		   (+ (* 2 p q) (square q)) ; compute q
+		   (/ count 2)))
+	(else (fib-iter (+ (* b q) (* a q) (* a p))
+			(+ (* b p) (* a q))
+			p
+			q
+			(- count 1))))
+	)
+
+
+
 
 
 (display "\nLoaded!")
