@@ -2,22 +2,27 @@
 
 
 
-;---------------------------------excercise-------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-
-
-
-
+;---------------------------------excercise------------------------------------
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
 
 ;-------------------------------------------------------------
 ;
 ;(cond (<p1 > <e 1 >)
 ;      (<p2 > <e 2 >)
 ;      (<pn > <e n >))
+
+
+
+;(cond (<p1 > <e 1 >)
+;      (<p2 > <e 2 >)
+;      (else  <e n >))
+
+
+;(if ⟨predicate⟩ ⟨consequent⟩ ⟨alternative⟩)
 ;
 ;-------------------------------------------------------------
 ;
@@ -45,18 +50,10 @@
    )
   )
 
-(return_bigger_two_sum_square 5 6 8)
+;(return_bigger_two_sum_square 5 6 8)
 
 
-
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
 ;--------------------------------square root------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
 
 
 (define (sqrt-iter guess x)
@@ -100,24 +97,7 @@
 ;  )
 
 
-
-
-
-
-
-
-
-
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
 ;--------------------------------cube root--------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-;-------------------------------------------------------------------------
-
-
 
 
 
@@ -153,7 +133,6 @@
 
 
 
-
 (define (cbrt x) (
 		  cbrt-iter 1.0 x)
   )
@@ -172,10 +151,6 @@
 
 
 ;-----------------------------------------1.9------------------------------------
-;--------------------------------------------------------------------------------
-;--------------------------------------------------------------------------------
-;--------------------------------------------------------------------------------
-
 
 
 ;(define (inc x) (
@@ -243,18 +218,14 @@
 
 
 
-
-
-
-
-;---------------------------- recursive version ------------
+;---------------------------- recursive version -------------------------------
 ;(define (expt b n)
 ;  (if (= n 0)
 ;    1
 ;    (* b (expt b (- n 1))))
 ;  )
 
-;----------------------------iterative version-------------
+;----------------------------iterative version---------------------------------
 (define (expt b n)
   (expt-iter b n 1))
 
@@ -268,7 +239,7 @@
 
 
 
-;--------------------------fast exponential recursive-----------
+;--------------------------fast exponential recursive--------------------------
 
 (define (fast-expt b n)
   (cond ((= n 0) 1)
@@ -277,7 +248,7 @@
 
 
 
-;---------------------------fast exponential iteration-----------
+;---------------------------fast exponential iteration-------------------------
 
 ;(define (fast-expt b n)
 ;    (fast-expt-iter b n 1))
@@ -295,7 +266,7 @@
 ;                       (* b a)))))
 ;
 
-;-------------------------multiple excercise recursive------------------
+;-------------------------multiple excercise recursive-------------------------
 ;
 ;(define (multp a b)
 ;  (if (= b 0)
@@ -304,7 +275,7 @@
 ;    )
 ;  )
 
-;-------------------------multiple excercise iterative------------------
+;-------------------------multiple excercise iterative-------------------------
 (define (multp a b)
   (multp-iter a b 0))
 
@@ -365,7 +336,7 @@
 ;
 
 
-;------------------------------- fast fib excersice 1.19 ---------------------
+;------------------------------- fast fib excercise 1.19 ---------------------
 (define (fast-fib n)
   (fib-iter 1 0 0 1 n))
 (define (fib-iter a b p q count)
@@ -399,11 +370,17 @@
 	    m))))
 
 
+;(define (expmod-fast base exp m)
+;  (remainder (fast-expt base exp) m))
+
+
+
 
 (define (fermat-test n)
   (define (try-it a)
     (= (expmod a n n) a))
   (try-it (+ 1 (random (- n 1)))))
+;  (try-it 3))
 
 ;---------------------------- why this is not ok? ---------------------------
 ;(define (fermat-test n)
@@ -418,13 +395,42 @@
 
 
 
-;----------------------------- prime test ---------------------------------
+;---------------------------- excercise 1.27 ----------------------------------
+;(define (cong? n) 
+;  (congcong n n)
+;	)
+;
+;
+;(define (congcong count n)
+;  (cond ((= count 1) (display "finished"))
+;	((test-cong (- count 1) n) (display (- count 1)) (newline) (congcong (- count 1) n))
+;	(else (congcong (- count 1) n))
+;	)
+;	)
+;
+;
+;(define (test-cong a n)
+;  (if (= (expmod a n n) a) #t #f))
+;
+;(define (gcd a b)
+;  (if (= b 0)
+;    a
+;    (gcd b (remainder a b))))
+;
+
+;--------------------------- refined prime test with next function -------------
+(define (next i) 
+  (if (= i 2) 3 (+ i 2))
+  )
+
+
+;----------------------------- prime test --------------------------------------
 (define (smallest-divisor n) (find-divisor n 2))
 
 (define (find-divisor n test-divisor)
   (cond ((> (square test-divisor) n) n)
 	((divides? test-divisor n) test-divisor)
-	(else (find-divisor n (+ test-divisor 1)))))
+	(else (find-divisor n (next test-divisor)))))
 
 (define (divides? a b) (= (remainder b a) 0))
 
@@ -433,13 +439,14 @@
 
 
 
-;------------------------- exercise 1.22 --------------------------------------
+
+;------------------------- exercise 1.22 ---------------------------------------
 (define (timed-prime-test n)
   (newline)
   (display n)
   (start-prime-test n (current-milliseconds)))
 (define (start-prime-test n start-time)
-  (if (prime? n)
+  (if (fermat-test n)
     (report-prime (- (current-milliseconds) start-time)) 
     (display " is not a prime")))
 (define (report-prime elapsed-time)
@@ -455,13 +462,184 @@
 
 (define (search-for-primes m count)
   (cond ((= count 0) (newline)) 
-	((prime? m) (timed-prime-test m) (search-for-primes (next-odd m) (- count 1)))
+	((fermat-test m) (timed-prime-test m) (search-for-primes (next-odd m) (- count 1)))
 	(else (search-for-primes (next-odd m) count))
 	)
   )
 
 
+
+
 ;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+;------------------------- Procedures as argument -----------------------------
+;------------------------------------------------------------------------------
+;------------------------------------------------------------------------------
+
+
+(define (sum term a next b)
+  (if (> a b)
+    0
+    (+ (term a)
+       (sum term (next a) next b))))
+
+(define (sum-iter term a next b)
+  (define (iter a result)
+    (if (> a b) 
+      result
+      (iter (next a) (+ (term a) result))))
+  (iter a 0))
+
+
+
+(define (product term a next b)
+  (if (> a b)
+    1
+    (* (term a)
+       (product term (next a) next b)))
+  )
+
+
+(define (product-iter term a next b)
+  (define (iter a result)
+    (if (> a b)
+      result
+      (iter (next a) (* (term a) result))))
+  (iter a 1))
+
+
+
+(define (accumulate combiner null-value term a next b)
+  (if (> a b)
+    null-value
+    (combiner (term a)
+	      (accumulate combiner null-value term (next a) next b))))
+
+(define (filtered-accumulate combiner null-value term a next b filter)
+  (if (> a b)
+    null-value
+    (if (filter a)
+      (combiner (term a)
+		(filtered-accumulate combiner null-value term (next a) next b filter))
+      (filtered-accumulate combiner null-value term (next a) next b filter))))
+
+
+(define (accumulate-iter combiner null-value term a next b)
+  (define (iter a result)
+    (if (> a b)
+      result
+      (iter (next a) (combiner (term a) result))))
+  (iter a null-value))
+
+
+(define (sum-cubes-acc a b)
+  (accumulate-iter + 0 cube a inc b))
+
+(define (sum-cubes-acc-prime a b)
+  (filtered-accumulate + 0 cube a inc b prime?))
+
+
+
+(define (gcd a b)
+  (if (= b 0)
+    a
+    (gcd b (remainder a b))))
+
+(define (product-itself-acc-gcd a b)
+  (define (gcd? x)
+    (if (= 1 (gcd x b))
+      #t
+      #f))
+  (filtered-accumulate * 1 identity a next b gcd?))
+
+
+
+(define (inc n) (+ n 1))
+
+(define (sum-cubes a b)
+  (sum-iter cube a inc b))
+
+
+(define (identity x) x)
+
+(define (sum-integers a b)
+  (sum identity a inc b))
+
+
+(define (pi-sum a b)
+  (define (pi-term x)
+    (/ 1.0 (* x (+ x 2))))
+  (define (pi-next x)
+    (+ x 4))
+  (sum pi-term a pi-next b))
+
+
+
+(define (factorial n)
+  (product-iter identity 1 inc n)
+  )
+
+(define (factorial-acc n)
+  (accumulate-iter * 1 identity 1 inc n))
+
+(define (pi-prod n)
+  (define (pi-prod-next x)
+    (+ x 2))
+  (if (odd? n)
+    (display "n must be even")
+    (/ (* 2 (product square 4.0 pi-prod-next n))
+       (* (+ n 1) (product square 3.0 pi-prod-next (- n 1))))))
+
+
+
+;----------------------- 1.29 -------------------------------------------------
+
+;(define (integral f a b n)
+;  (define h (/ (- b a) n))
+;  (define (add-two-h x)
+;    (+ x h h))
+;  (* (/ h 3.0)
+;     (+ (f a)
+;	(f (+ a (* n h)))
+;	(* 4 (sum f (+ a h) add-two-h b))
+;	(* 2 (sum f (+ a (* 2 h)) add-two-h b))
+;     )
+;  )
+;)
+
+
+(define (simpson f a b n)
+  (define h (/ (- b a) n))
+
+  (define (y k)
+    (f (+ a (* k h))))
+
+  (define (factor k)
+    (cond ((or (= k 0) (= k n))
+	   1)
+	  ((odd? k)
+	   4)
+	  (else
+	    2)))
+
+  (define (term k)
+    (* (factor k)
+       (y k)))
+
+  (define (next k)
+    (+ k 1))
+
+  (if (not (even? n))
+    (error "n can't be odd")
+    (* (/ h 3)
+       (sum term (exact->inexact 0) next n)))
+  )
+
+
+
+
+
+;-------------------------------------------------------------------------------
 (display "\nLoaded!")
 
 
