@@ -31,6 +31,7 @@ cbrt	./test.scm	/^(define (cbrt x) ($/;"	f
 cbrt-iter	./test.scm	/^(define (cbrt-iter guess x) ($/;"	f
 cc	./test.scm	/^(define (cc amount kinds-of-coins)$/;"	f
 close-enough?	./test.scm	/^(define (close-enough? x y) (< (abs (- x y)) 0.001))$/;"	f
+cont-frac	./test.scm	/^(define (cont-frac N D k)$/;"	f
 count-change	./test.scm	/^(define (count-change amount)$/;"	f
 cube	./test.scm	/^(define (cube x) ($/;"	f
 display-info	./test.scm	/^(define (display-info guess step)$/;"	f
@@ -92,3 +93,4 @@ sum-integers	./test.scm	/^(define (sum-integers a b)$/;"	f
 sum-iter	./test.scm	/^(define (sum-iter term a next b)$/;"	f
 timed-prime-test	./test.scm	/^(define (timed-prime-test n)$/;"	f
 tolerance	./test.scm	/^(define tolerance 0.00001)$/;"	f
+xroot	./test.scm	/^(define (xroot x)$/;"	f
