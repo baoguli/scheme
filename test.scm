@@ -701,15 +701,6 @@
 ;	    (else ((display "trying") (display next) (newline) (try next))))))
 ;  (try first-guess))
 
-;(define (fixed-point f first-guess)
-;  (define (close-enough? v1 v2)
-;    (< (abs (- v1 v2))
-;       tolerance))
-;  (define (try guess)
-;    (let ((next (f guess)))
-;      (cond ((close-enough? guess next) next)
-;	    (else (try next)))))
-;  (try first-guess))
 
 
 (define (fixed-point f first-guess)
@@ -737,6 +728,9 @@
   (display guess)
   (newline))
 
+(define (xroot x)
+  (fixed-point (lambda (y) (average y (/ (log x) (log y)))) 2.0)
+  )
 
 
 
