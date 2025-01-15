@@ -2,14 +2,12 @@
 
 
 
-;---------------------------------excercise------------------------------------
-;------------------------------------------------------------------------------
-;------------------------------------------------------------------------------
-;------------------------------------------------------------------------------
-;------------------------------------------------------------------------------
-;------------------------------------------------------------------------------
-
-;-------------------------------------------------------------
+;---------------------------------excercise-------------------------------------
+;-------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
+;-------------------------------------------------------------------------------
 ;
 ;(cond (<p1 > <e 1 >)
 ;      (<p2 > <e 2 >)
@@ -24,7 +22,6 @@
 
 ;(if ⟨predicate⟩ ⟨consequent⟩ ⟨alternative⟩)
 ;
-;-------------------------------------------------------------
 ;
 
 
@@ -53,7 +50,7 @@
 ;(return_bigger_two_sum_square 5 6 8)
 
 
-;--------------------------------square root------------------------------
+;--------------------------------square root------------------------------------
 
 
 (define (sqrt-iter guess x)
@@ -89,7 +86,7 @@
   )
 
 
-;--------------------------------new if----------------------------------
+;--------------------------------new if----------------------------------------
 
 ;(define (new-if predicate then-clause else-clause) (
 ;						    cond (predicate then-clause) 
@@ -97,7 +94,7 @@
 ;  )
 
 
-;--------------------------------cube root--------------------------------
+;--------------------------------cube root-------------------------------------
 
 
 
@@ -150,7 +147,7 @@
 
 
 
-;-----------------------------------------1.9------------------------------------
+;-----------------------------------------1.9-----------------------------------
 
 
 ;(define (inc x) (
@@ -218,14 +215,14 @@
 
 
 
-;---------------------------- recursive version -------------------------------
+;---------------------------- recursive version --------------------------------
 ;(define (expt b n)
 ;  (if (= n 0)
 ;    1
 ;    (* b (expt b (- n 1))))
 ;  )
 
-;----------------------------iterative version---------------------------------
+;----------------------------iterative version----------------------------------
 (define (expt b n)
   (expt-iter b n 1))
 
@@ -239,7 +236,7 @@
 
 
 
-;--------------------------fast exponential recursive--------------------------
+;--------------------------fast exponential recursive---------------------------
 
 (define (fast-expt b n)
   (cond ((= n 0) 1)
@@ -248,7 +245,7 @@
 
 
 
-;---------------------------fast exponential iteration-------------------------
+;---------------------------fast exponential iteration--------------------------
 
 ;(define (fast-expt b n)
 ;    (fast-expt-iter b n 1))
@@ -266,7 +263,7 @@
 ;                       (* b a)))))
 ;
 
-;-------------------------multiple excercise recursive-------------------------
+;-------------------------multiple excercise recursive--------------------------
 ;
 ;(define (multp a b)
 ;  (if (= b 0)
@@ -286,7 +283,7 @@
   )
 
 
-;------------------------fast multiple excercise recursive---------------
+;------------------------fast multiple excercise recursive----------------------
 (define (double x)
   (+ x x)
   )
@@ -301,7 +298,7 @@
 ;	(else (+ a (fast-multp a (- b 1)))))
 ;  )
     
-;------------------------fast multiple excercise iterative---------------
+;------------------------fast multiple excercise iterative---------------------
 
 (define (fast-multp a b)
   (fast-multp-iter a b 0))
@@ -314,7 +311,7 @@
      
 
 
-;----------------------------- fib recursive -----------------------------
+;----------------------------- fib recursive ----------------------------------
 
 (define (fib n) (
 		 cond ((= n 0) 0) 
@@ -326,7 +323,7 @@
   )
 
 
-;------------------------------ fib iterative -------------------------------
+;------------------------------ fib iterative ---------------------------------
 ;(define (fib n)
 ;  (fib-iter 1 0 n))
 ;(define (fib-iter a b count)
@@ -575,6 +572,8 @@
 
 
 
+
+
 (define (factorial n)
   (product-iter identity 1 inc n)
   )
@@ -607,6 +606,20 @@
 ;  )
 ;)
 
+;(define (integral f a b dx)
+;  (define (add-dx x)
+;    (+ x dx))
+;  (* (sum f (+ a (/ dx 2.0)) add-dx b)
+;     dx))
+;
+;(define (integral f a b dx)
+;  (* (sum f
+;	  (+ a (/ dx 2.0))
+;	  (lambda (x) (+ x dx))
+;	  b)
+;     dx))
+
+
 
 (define (simpson f a b n)
   (define h (/ (- b a) n))
@@ -637,7 +650,99 @@
 
 
 
+;------------------------- 1.3.3 -----------------------------------------------
 
+
+(define (close-enough? x y) (< (abs (- x y)) 0.001))
+
+
+(define (search f neg-point pos-point)
+  (let ((midpoint (average neg-point pos-point)))
+    (if (close-enough? neg-point pos-point)
+      midpoint
+      (let ((test-value (f midpoint)))
+	(cond ((positive? test-value)
+	       (search f neg-point midpoint))
+	      ((negative? test-value)
+	       (search f midpoint pos-point))
+	      (else midpoint))))))
+
+(define (half-interval-method f a b)
+  (let ((a-value (f a))
+	(b-value (f b)))
+    (cond ((and (negative? a-value) (positive? b-value))
+	   (search f a b))
+	  ((and (negative? b-value) (positive? a-value))
+	   (search f b a))
+	  (else
+	    (error "Values are not of opposite sign" a b)))))
+
+(define tolerance 0.00001)
+
+;(define (fixed-point f first-guess)
+;  (define (close-enough? v1 v2)
+;    (< (abs (- v1 v2))
+;       tolerance))
+;  (define (try guess)
+;    (let ((next (f guess)))
+;      (if (close-enough? guess next)
+;	next
+;	(try next))))
+;  (try first-guess))
+
+
+;(define (fixed-point f first-guess)
+;  (define (close-enough? v1 v2)
+;    (< (abs (- v1 v2))
+;       tolerance))
+;  (define (try guess)
+;    (let ((next (f guess)))
+;      (cond ((close-enough? guess next) next)
+;	    (else ((display "trying") (display next) (newline) (try next))))))
+;  (try first-guess))
+
+;(define (fixed-point f first-guess)
+;  (define (close-enough? v1 v2)
+;    (< (abs (- v1 v2))
+;       tolerance))
+;  (define (try guess)
+;    (let ((next (f guess)))
+;      (cond ((close-enough? guess next) next)
+;	    (else (try next)))))
+;  (try first-guess))
+
+
+(define (fixed-point f first-guess)
+
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+
+  (define (try guess step)
+    (display-info guess step)                       
+    (let ((next (f guess)))
+      (if (close-enough? next guess)
+	(begin                                  
+	  (display-info next (+ 1 step))      
+	  next)
+	(try next (+ 1 step)))))
+
+  (try first-guess 1))
+
+(define (display-info guess step)
+  (display "Step: ")
+  (display step)
+  (display " ")
+
+  (display "Guess: ")
+  (display guess)
+  (newline))
+
+
+
+
+(define (sqrt x)
+  (fixed-point (lambda (y) (average y (/ x y)))
+	       1.0))
 
 ;-------------------------------------------------------------------------------
 (display "\nLoaded!")
